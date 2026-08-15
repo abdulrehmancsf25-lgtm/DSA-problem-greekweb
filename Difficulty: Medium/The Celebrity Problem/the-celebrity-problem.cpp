@@ -1,44 +1,39 @@
 class Solution {
-  public:
-    int celebrity(vector<vector<int>>& mat) {
-        // code here
-        if(mat.size() == 1 && mat[0].size() == 1){
-            return 0 ;
-        }
-        
-        
-        bool colCheck ;
-        vector<int> cols ;
-        for(int col = 0 ; col < mat.size() ; col++){
-              colCheck = true ;
-            for(int row = 0 ; row < mat.size() ; row++){
-                if(row != col)
-                    if(mat[row][col] != 1){
-                        colCheck = false ;
-                          break ;
-                    }
-                
-            }
-                 if(colCheck == true){
-                    cols.push_back(col) ;
-                 }
-        }
-       
-       
-        bool rowCheck ;
-        for(int row = 0 ; row < cols.size() ; row++){
-            rowCheck = true ;
-            for(int col = 0 ; col < mat.size() ; col++){
-                if(cols[row] != col)
-                    if(mat[cols[row]][col] != 0){
-                        rowCheck = false ;
-                        break ;
-                    }
-            }
-              if(rowCheck){
-                        return cols[row] ;
-                    }
-        }
-    return -1 ;
-    }
+	public:
+	int celebrity(vector<vector<int>> & mat) {
+		stack<int> indices ;
+		for (int i = 0 ; i < mat.size() ; i++) {
+			indices.push(i) ;
+		}
+		
+		int first, sec ;
+		while (indices.size() > 1) {
+			first = indices.top() ;
+			indices.pop() ;
+			if (!indices.empty())
+				sec = indices.top() ;
+			indices.pop() ;
+			
+			if (mat[first][sec] == 1)
+				indices.push(sec) ;
+			else if (mat[sec][first] == 1)
+				indices.push(first) ;
+			
+		}
+		if (indices.empty())
+			return - 1 ;
+		int ptMember = indices.top() ;
+		for (int i = 0 ; i < mat.size() ; i++) {
+			if (i != ptMember)
+				if (mat[i][ptMember] == 0)
+					return - 1 ;
+		}
+		
+		for (int i = 0 ; i < mat.size() ; i++) {
+			if (i != ptMember)
+				if (mat[ptMember][i] == 1)
+					return - 1 ;
+		}
+		return ptMember ;
+	}
 };
