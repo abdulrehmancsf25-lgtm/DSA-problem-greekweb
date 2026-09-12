@@ -13,29 +13,30 @@ class Node {
 }; */
 
 class Solution {
-	void solve(Node *root, int sum, int &max_sum, int level, int &max_level) {
+	void solve(Node* root, int level, int &maxLevel, int sum,
+	int& maxSum) {
 		if (root == NULL) {
-			if (level > max_level) {
-				max_level = level ;
-				max_sum = sum ;
+			if (level > maxLevel) {
+				maxLevel = level ;
+				maxSum = sum ;
 			}
-			else if (level == max_level) {
-				max_sum = max(max_sum, sum) ;
-			}
+			else if (level == maxLevel)
+				maxSum = max(sum, maxSum) ;
+			
 			return ;
 		}
-		
-		sum += root -> data ;
 		level++ ;
+		sum += root -> data ;
 		
-		solve(root->left, sum, max_sum, level, max_level);
-		solve(root->right, sum, max_sum, level, max_level);
+		solve(root -> left, level, maxLevel, sum, maxSum) ;
+		solve(root -> right, level, maxLevel, sum, maxSum) ;
+		
 	}
 	public:
 	int sumOfLongRootToLeafPath(Node *root) {
-		
-		int sum = 0, max_sum = 0, level = 0, max_level = INT_MIN ;
-		solve(root, sum, max_sum, level, max_level) ;
-		return max_sum ;
+		// code here
+		int maxLevel = 0, maxSum = 0 ;
+		solve(root, 0, maxLevel, 0, maxSum) ;
+		return maxSum ;
 	}
 };
