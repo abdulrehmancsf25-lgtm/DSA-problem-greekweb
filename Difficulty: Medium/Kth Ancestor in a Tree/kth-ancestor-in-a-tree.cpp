@@ -14,33 +14,33 @@ class Node {
 
 class Solution {
 	public:
-	bool kth(Node* root, int target, vector<int>& temp) {
-		if (root == NULL)
-			return false ;
-		temp.push_back(root-> data) ;
-		if (root -> data == target)
-			return true ;
-		// calls
-		if (kth(root -> left, target, temp) || kth(root -> right, target, temp))
-			return true ;
+	Node* solve(Node* root, int &k, int node) {
+		if (!root)
+			return NULL ;
+		if (root -> data == node)
+			return root ;
+		Node* lft = solve(root -> left, k, node) ;
+		Node* rgt = solve(root -> right, k, node) ;
 		
-		temp.pop_back() ;
-		return false ;
+		if (lft || rgt) {
+			k-- ;
+			if (k == 0) {
+				k = -1 ;
+				return root ;
+			}
+			
+		}
+		if (lft)
+			return lft ;
+		if (rgt)
+			return rgt ;
+		return NULL ;
 	}
 	int kthAncestor(Node *root, int k, int node) {
 		// code here
-		vector<int> temp ;
-		bool check = kth(root, node, temp) ;
-		if (!check)
+		Node* ans = solve(root, k, node) ;
+		if (k > 0)
 			return - 1 ;
-		if (temp.size() <= k)
-			return - 1 ;
-		int S = temp.size() ;
-		int i = temp.size() - 1 ;
-		for (; i > S - k-1; i--)
-			temp.pop_back() ;
-		
-		return temp.back() ;
-		
+		return ans -> data ;
 	}
 };
